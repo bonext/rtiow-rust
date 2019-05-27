@@ -12,13 +12,15 @@ fn main() {
 
     // fill-in fancy background
     for (x, y, pixel) in img.enumerate_pixels_mut() {
-        let r = x as f32 / width as f32;
-        let g = (height - y) as f32 / height as f32;
-        let b = 0.2;
+        let color = vector::Vector3f{
+            x: x as f32 / width as f32,
+            y: (height - y) as f32 / height as f32,
+            z: 0.2
+        };
         *pixel = image::Rgb([
-            (255.99 * r) as u8, 
-            (255.99 * g) as u8, 
-            (255.99 * b) as u8
+            (255.99 * color.x) as u8, 
+            (255.99 * color.y) as u8, 
+            (255.99 * color.z) as u8
         ]);
     }
 

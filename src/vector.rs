@@ -68,8 +68,16 @@ impl Div<f32> for Vector3f {
 }
 
 impl Vector3f {
+    pub fn length_squared(&self) -> f32 {
+        self.x * self.x + self.y * self.y + self.z * self.z
+    }
+
+    pub fn length(&self) -> f32 {
+        self.length_squared().sqrt()
+    }
+
     pub fn norm(&self) -> f32 {
-        (self.x * self.x + self.y * self.y + self.z * self.z).sqrt()
+        self.length()
     }
 
     pub fn dot(&self, other: Vector3f) -> f32 {
