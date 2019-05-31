@@ -1,3 +1,6 @@
+// TODO: left-commutative operations with scalars
+// TODO: better c-tor
+// TODO: add new() method
 use std::ops::{Add, Sub, Neg, Mul, Div};
 
 #[derive(Debug, PartialEq, Copy, Clone)]
@@ -10,6 +13,7 @@ pub struct Vector3f {
 impl Add for Vector3f {
     type Output = Vector3f;
 
+    // TODO: why not reference here?
     fn add(self, other: Vector3f) -> Vector3f {
         Vector3f{
             x: self.x + other.x,
