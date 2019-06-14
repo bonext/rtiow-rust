@@ -72,6 +72,10 @@ impl Div<f32> for Vector3f {
 }
 
 impl Vector3f {
+    pub fn new(x: f32, y: f32, z: f32) -> Vector3f {
+        Vector3f {x: x, y: y, z: z}
+    }
+
     pub fn length_squared(&self) -> f32 {
         self.x * self.x + self.y * self.y + self.z * self.z
     }
