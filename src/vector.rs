@@ -1,6 +1,9 @@
 // TODO: left-commutative operations with scalars
 // TODO: better c-tor
 // TODO: add new() method
+extern crate rand;
+use rand::distributions::{Distribution, Normal};
+
 use std::ops::{Add, Sub, Neg, Mul, Div};
 
 #[derive(Debug, PartialEq, Copy, Clone)]
@@ -108,6 +111,14 @@ impl Vector3f {
         else {
             return self.clone();
         }
+    }
+
+    pub fn random_unit() -> Vector3f {
+        let normal = Normal::new(0.0, 1.0);
+        let x = normal.sample(&mut rand::thread_rng()) as f32;
+        let y = normal.sample(&mut rand::thread_rng()) as f32;
+        let z = normal.sample(&mut rand::thread_rng()) as f32;
+        Vector3f::new(x, y, z).normalized()
     }
 }
 
