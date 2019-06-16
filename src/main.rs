@@ -64,7 +64,7 @@ fn main() {
     let mut img = image::ImageBuffer::new(width, height);
     for (x, y, pixel) in img.enumerate_pixels_mut() {
         let u = x as f32 / width as f32;
-        let v = y as f32 / height as f32;
+        let v = (height - y) as f32 / height as f32;
 
         let r = ray::Ray::new(origin, llc + horizontal * u + vertical * v);
 
