@@ -5,11 +5,11 @@ use super::ray::Ray;
 pub struct HitRecord {
     pub t: f32,
     pub p: Vector3f,
-    pub normal: Vector3f
+    pub normal: Vector3f,
 }
 
 pub trait Hitable {
-    fn hit(&self, r: &Ray, t_min: f32, t_max: f32, record: &mut HitRecord) -> bool;
+    fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<HitRecord>;
 }
 
 pub struct HitableList<'a, T: Hitable> {
@@ -23,7 +23,7 @@ impl<'a, T: Hitable> HitableList<'a, T> {
 }
 
 impl<'a, T: Hitable> Hitable for HitableList<'a, T> {
-    fn hit(&self, r: &Ray, t_min: f32, t_max: f32, record: &mut HitRecord) -> bool {
+    fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
         // let's implement iteration over hitables here at first
         let mut hit_anything = false;
         let mut closest_so_far = t_max;
@@ -33,13 +33,20 @@ impl<'a, T: Hitable> Hitable for HitableList<'a, T> {
             normal: Vector3f::new(0.0, 0.0, 0.0)
         };
         for item in self.items.iter() {
-            if item.hit(r, t_min, closest_so_far, &mut temp_rec) {
-                hit_anything = true;
-                closest_so_far = temp_rec.t;
-                *record = temp_rec;
+            match item.hit(r, t_min, closest_so_far) {
+                Some(record) => {
+                    hit_anything = true;
+                    closest_so_far = record.t;
+                    temp_rec = record;
+                },
+                None => {},
             }
         }
-        return hit_anything;
+        if hit_anything {
+            Some(temp_rec)
+        }
+        else {
+            None
+        }
     }
 }
-

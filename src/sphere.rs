@@ -16,7 +16,7 @@ impl Sphere {
 }
 
 impl Hitable for Sphere {
-    fn hit(&self, r: &Ray, t_min: f32, t_max: f32, rec: &mut HitRecord) -> bool {
+    fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
         let oc = r.origin - self.center;
         let a = r.direction.dot(r.direction);
         let b = 2.0 * oc.dot(r.direction);
@@ -26,19 +26,21 @@ impl Hitable for Sphere {
             let r_lo = (-b - dscr.sqrt()) / 2.0 / a;
             let r_hi = (-b + dscr.sqrt()) / 2.0 / a;
             if (t_min <= r_lo) && (r_lo < t_max) {
-                rec.t = r_lo;
-                rec.p = r.at(r_lo);
-                rec.normal = (r.at(r_lo) - self.center).normalized();
-                return true;
+                return Some(HitRecord{
+                    t: r_lo,
+                    p: r.at(r_lo),
+                    normal: (r.at(r_lo) - self.center).normalized()
+                })
             }
             if (t_min <= r_hi) && (r_hi < t_max) {
-                rec.t = r_hi;
-                rec.p = r.at(r_hi);
-                rec.normal = (r.at(r_hi) - self.center).normalized();
-                return true;
+                return Some(HitRecord{
+                    t: r_hi,
+                    p: r.at(r_hi),
+                    normal: (r.at(r_hi) - self.center).normalized()
+                })
             }
         }
-        return false;
+        return None;
     }
 }
 

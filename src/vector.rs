@@ -95,6 +95,7 @@ impl Vector3f {
         self.x * other.x + self.y * other.y + self.z * other.z
     }
 
+    #[allow(dead_code)]
     pub fn cross(&self, other: Vector3f) -> Vector3f {
         Vector3f{
             x: self.y * other.z - self.z * other.y,
