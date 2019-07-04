@@ -14,6 +14,7 @@ use vector::Vector3f;
 use ray::Ray;
 use sphere::Sphere;
 use hitable::{Hitable, HitableList};
+use materials::Lambertian;
 
 fn compute_color<'a, T: Hitable>(r: Ray, world: &'a HitableList<'a, T>, depth_limit: u16) -> Vector3f {
     let unit_dir = r.direction.normalized();
@@ -48,10 +49,14 @@ fn main() {
 
     let spheres = vec![
         Sphere::new(
-            Vector3f::new(0.0, 0.0, -1.0), 0.5
+            Vector3f::new(0.0, 0.0, -1.0), 
+            0.5, 
+            Lambertian{..Default::default()}
         ),
         Sphere::new(
-            Vector3f::new(0.0, -100.5, -1.0), 100.0
+            Vector3f::new(0.0, -100.5, -1.0), 
+            100.0, 
+            Lambertian{..Default::default()}
         )
     ];
     let world = HitableList::from(&spheres[..]);

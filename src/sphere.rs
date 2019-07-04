@@ -2,29 +2,22 @@ use crate::hitable::Hitable;
 use crate::hitable::HitRecord;
 use crate::ray::Ray;
 use crate::vector::Vector3f;
+use crate::materials::Material;
 
 #[derive(Debug, Copy, Clone)]
-pub struct Sphere {
+pub struct Sphere<T: Material> {
     center: Vector3f,
-    radius: f32
+    radius: f32,
+    material: T
 }
 
-impl Sphere {
-    pub fn new(center: Vector3f, radius: f32) -> Sphere {
-        Sphere{center, radius}
+impl<T: Material> Sphere<T> {
+    pub fn new(center: Vector3f, radius: f32, material: T) -> Sphere<T> {
+        Sphere {center, radius, material}
     }
 }
 
-impl Default for Sphere {
-    fn default() -> Self {
-        Sphere {
-            center: Vector3f::new(0.0, 0.0, 0.0),
-            radius: 1.0,
-        }
-    }
-}
-
-impl Hitable for Sphere {
+impl<T: Material> Hitable for Sphere<T> {
     fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
         let oc = r.origin - self.center;
         let a = r.direction.dot(r.direction);
