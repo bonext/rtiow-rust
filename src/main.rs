@@ -28,15 +28,10 @@ fn compute_color<'a, T: Hitable>(r: Ray, world: &'a HitableList<'a, T>, depth_li
     let hit_t_min = 0.0001;
     let hit_t_max = std::f32::MAX;
 
-    let mut temp_rec = HitRecord {
-        t: 0.0,
-        p: Vector3f::new(0.0, 0.0, 0.0),
-        normal: Vector3f::new(0.0, 0.0, 0.0)
-    };
     match world.hit(r, hit_t_min, hit_t_max) {
-        Some(temp_rec) => {
-            let target = temp_rec.p + temp_rec.normal + Vector3f::random_unit();
-            let other_ray = Ray::new(temp_rec.p, target - temp_rec.p);
+        Some(hit) => {
+            let target = hit.p + hit.normal + Vector3f::random_unit();
+            let other_ray = Ray::new(hit.p, target - hit.p);
             compute_color(other_ray, world, depth_limit - 1) * 0.5
         },
         None => default_color,

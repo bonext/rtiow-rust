@@ -15,6 +15,15 @@ impl Sphere {
     }
 }
 
+impl Default for Sphere {
+    fn default() -> Self {
+        Sphere {
+            center: Vector3f::new(0.0, 0.0, 0.0),
+            radius: 1.0,
+        }
+    }
+}
+
 impl Hitable for Sphere {
     fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
         let oc = r.origin - self.center;

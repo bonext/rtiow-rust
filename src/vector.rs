@@ -6,7 +6,7 @@ use rand::distributions::{Distribution, Normal};
 
 use std::ops::{Add, Sub, Neg, Mul, Div};
 
-#[derive(Debug, PartialEq, Copy, Clone)]
+#[derive(Clone, Copy, Debug, Default, PartialEq)]
 pub struct Vector3f {
     pub x: f32,
     pub y: f32,

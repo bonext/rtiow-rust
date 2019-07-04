@@ -11,6 +11,7 @@ pub struct Camera {
 
 impl Camera {
     // TODO: new()
+    // TODO: impl Default instead
     pub fn default() -> Camera {
         Camera {
             origin: Vector3f::new(0.0, 0.0, 0.0),

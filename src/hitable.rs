@@ -1,7 +1,7 @@
 use super::vector::Vector3f;
 use super::ray::Ray;
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Default)]
 pub struct HitRecord {
     pub t: f32,
     pub p: Vector3f,
@@ -27,11 +27,7 @@ impl<'a, T: Hitable> Hitable for HitableList<'a, T> {
         // let's implement iteration over hitables here at first
         let mut hit_anything = false;
         let mut closest_so_far = t_max;
-        let mut temp_rec = HitRecord {
-            t: 0.0,
-            p: Vector3f::new(0.0, 0.0, 0.0),
-            normal: Vector3f::new(0.0, 0.0, 0.0)
-        };
+        let mut temp_rec: HitRecord = Default::default();
         for item in self.items.iter() {
             match item.hit(r, t_min, closest_so_far) {
                 Some(record) => {
