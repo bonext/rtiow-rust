@@ -51,12 +51,16 @@ fn main() {
         Sphere::new(
             Vector3f::new(0.0, 0.0, -1.0), 
             0.5, 
-            Lambertian{..Default::default()}
+            Lambertian{
+                attenuation: Vector3f::new(0.5, 0.5, 0.5)
+            }
         ),
         Sphere::new(
             Vector3f::new(0.0, -100.5, -1.0), 
             100.0, 
-            Lambertian{..Default::default()}
+            Lambertian{
+                attenuation: Vector3f::new(0.5, 0.5, 0.5)
+            }
         )
     ];
     let world = HitableList::from(&spheres[..]);
