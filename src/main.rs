@@ -13,8 +13,7 @@ use camera::Camera;
 use vector::Vector3f;
 use ray::Ray;
 use sphere::Sphere;
-use hitable::{HitRecord, Hitable, HitableList};
-use materials::Lambertian;
+use hitable::{Hitable, HitableList};
 
 fn compute_color<'a, T: Hitable>(r: Ray, world: &'a HitableList<'a, T>, depth_limit: u16) -> Vector3f {
     let unit_dir = r.direction.normalized();

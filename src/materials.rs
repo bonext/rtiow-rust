@@ -6,11 +6,12 @@ pub trait Material {
     fn scatter(&self, hit: HitRecord) -> Option<(Ray, Vector3f)>;
 }
 
+#[allow(dead_code)]
 pub struct Lambertian {
 }
 
 impl Material for Lambertian {
-    fn scatter(&self, hit: HitRecord) -> Option<(Ray, Vector3f)> {
+    fn scatter(&self, _hit: HitRecord) -> Option<(Ray, Vector3f)> {
         return None;
     }
 }

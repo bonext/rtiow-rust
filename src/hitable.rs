@@ -6,6 +6,7 @@ pub struct HitRecord {
     pub t: f32,
     pub p: Vector3f,
     pub normal: Vector3f,
+    pub in_ray: Ray
 }
 
 pub trait Hitable {
