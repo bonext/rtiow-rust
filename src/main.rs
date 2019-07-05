@@ -14,9 +14,9 @@ use vector::Vector3f;
 use ray::Ray;
 use sphere::Sphere;
 use hitable::{Hitable, HitableList};
-use materials::{Material, Lambertian, Metal};
+use materials::{Lambertian, Metal};
 
-fn compute_color<'a, T: Hitable>(r: Ray, world: &'a HitableList<'a, T>, depth_limit: u16) -> Vector3f {
+fn compute_color(r: Ray, world: &HitableList, depth_limit: u16) -> Vector3f {
     let unit_dir = r.direction.normalized();
     let t = 0.5 * (unit_dir.y + 1.0);
     let default_color = Vector3f::new(1.0, 1.0, 1.0) * (1.0 - t) + Vector3f::new(0.5, 0.7, 1.0) * t;
@@ -50,39 +50,39 @@ fn main() {
     let antialiasing_samples = 100;
     let secondary_ray_limit = 8;
 
-    let spheres : Vec<Box<dyn Hitable>> = vec![
-        Box::new(Sphere::new(
-            Vector3f::new(0.0, 0.0, -1.0), 
-            0.5, 
-            Lambertian{
-                albedo: Vector3f::new(0.8, 0.3, 0.3)
-            }
-        )),
-        Box::new(Sphere::new(
-            Vector3f::new(0.0, -100.5, -1.0), 
-            100.0, 
-            Lambertian{
-                albedo: Vector3f::new(0.8, 0.8, 0.0)
-            }
-        )),
-        Box::new(Sphere::new(
-            Vector3f::new(1.0, 0.0, -1.0), 
-            0.5, 
-            Metal{
-                albedo: Vector3f::new(0.8, 0.3, 0.3)
-            }
-        )),
-        Box::new(Sphere::new(
-            Vector3f::new(-11.0, 0.0, -1.0), 
-            0.5, 
-            Metal{
-                albedo: Vector3f::new(0.8, 0.3, 0.3)
-            }
-        )),
-    ];
+    let world = HitableList{
+        items: vec![
+            Box::new(Sphere::new(
+                Vector3f::new(0.0, 0.0, -1.0), 
+                0.5, 
+                Lambertian{
+                    albedo: Vector3f::new(0.8, 0.3, 0.3)
+                }
+            )),
+            Box::new(Sphere::new(
+                Vector3f::new(0.0, -100.5, -1.0), 
+                100.0, 
+                Lambertian{
+                    albedo: Vector3f::new(0.8, 0.8, 0.0)
+                }
+            )),
+            Box::new(Sphere::new(
+                Vector3f::new(1.0, 0.0, -1.0), 
+                0.5, 
+                Metal{
+                    albedo: Vector3f::new(0.8, 0.6, 0.2)
+                }
+            )),
+            Box::new(Sphere::new(
+                Vector3f::new(-1.0, 0.0, -1.0), 
+                0.5, 
+                Metal{
+                    albedo: Vector3f::new(0.8, 0.8, 0.8)
+                }
+            )),
+        ]
+    };
 
-    // TODO: new world
-    
     let cam = Camera::default();
 
     let mut img = image::ImageBuffer::new(width, height);

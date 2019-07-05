@@ -15,17 +15,11 @@ pub trait Hitable {
     fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<HitRecord>;
 }
 
-pub struct HitableList<'a, T: Hitable> {
-    items: &'a [T]
+pub struct HitableList {
+    pub items: Vec<Box<dyn Hitable>>,
 }
 
-impl<'a, T: Hitable> HitableList<'a, T> {
-    pub fn from(items: &'a [T]) -> HitableList<'a, T> {
-        HitableList{items}
-    }
-}
-
-impl<'a, T: Hitable> Hitable for HitableList<'a, T> {
+impl Hitable for HitableList {
     fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
         // let's implement iteration over hitables here at first
         let mut closest_so_far = t_max;
