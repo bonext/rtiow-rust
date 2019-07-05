@@ -30,9 +30,12 @@ fn compute_color<'a, T: Hitable>(r: Ray, world: &'a HitableList<'a, T>, depth_li
 
     match world.hit(r, hit_t_min, hit_t_max) {
         Some(hit) => {
-            let target = hit.p + hit.normal + Vector3f::random_unit();
-            let other_ray = Ray::new(hit.p, target - hit.p);
-            compute_color(other_ray, world, depth_limit - 1) * 0.5
+            match hit.material.scatter(hit){
+                Some((scattered_ray, attenuation)) => {
+                    compute_color(scattered_ray, world, depth_limit - 1) * attenuation
+                },
+                None => default_color,
+            }
         },
         None => default_color,
     }
@@ -59,7 +62,7 @@ fn main() {
             Vector3f::new(0.0, -100.5, -1.0), 
             100.0, 
             Lambertian{
-                attenuation: Vector3f::new(0.5, 0.5, 0.5)
+                attenuation: Vector3f::new(0.7, 0.3, 0.3)
             }
         )
     ];

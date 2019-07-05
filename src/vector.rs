@@ -62,6 +62,17 @@ impl Mul<f32> for Vector3f {
     }
 }
 
+impl Mul<Vector3f> for Vector3f {
+    type Output = Vector3f;
+    fn mul(self, other: Vector3f) -> Vector3f {
+        Vector3f {
+            x: self.x * other.x,
+            y: self.y * other.y,
+            z: self.z * other.z
+        }
+    }
+}
+
 impl Div<f32> for Vector3f {
     type Output = Vector3f;
 
