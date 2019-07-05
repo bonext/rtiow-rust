@@ -14,7 +14,7 @@ use vector::Vector3f;
 use ray::Ray;
 use sphere::Sphere;
 use hitable::{Hitable, HitableList};
-use materials::Lambertian;
+use materials::{Material, Lambertian, Metal};
 
 fn compute_color<'a, T: Hitable>(r: Ray, world: &'a HitableList<'a, T>, depth_limit: u16) -> Vector3f {
     let unit_dir = r.direction.normalized();
@@ -50,24 +50,39 @@ fn main() {
     let antialiasing_samples = 100;
     let secondary_ray_limit = 8;
 
-    let spheres = vec![
-        Sphere::new(
+    let spheres : Vec<Box<dyn Hitable>> = vec![
+        Box::new(Sphere::new(
             Vector3f::new(0.0, 0.0, -1.0), 
             0.5, 
             Lambertian{
-                attenuation: Vector3f::new(0.5, 0.5, 0.5)
+                albedo: Vector3f::new(0.8, 0.3, 0.3)
             }
-        ),
-        Sphere::new(
+        )),
+        Box::new(Sphere::new(
             Vector3f::new(0.0, -100.5, -1.0), 
             100.0, 
             Lambertian{
-                attenuation: Vector3f::new(0.7, 0.3, 0.3)
+                albedo: Vector3f::new(0.8, 0.8, 0.0)
             }
-        )
+        )),
+        Box::new(Sphere::new(
+            Vector3f::new(1.0, 0.0, -1.0), 
+            0.5, 
+            Metal{
+                albedo: Vector3f::new(0.8, 0.3, 0.3)
+            }
+        )),
+        Box::new(Sphere::new(
+            Vector3f::new(-11.0, 0.0, -1.0), 
+            0.5, 
+            Metal{
+                albedo: Vector3f::new(0.8, 0.3, 0.3)
+            }
+        )),
     ];
-    let world = HitableList::from(&spheres[..]);
 
+    // TODO: new world
+    
     let cam = Camera::default();
 
     let mut img = image::ImageBuffer::new(width, height);
