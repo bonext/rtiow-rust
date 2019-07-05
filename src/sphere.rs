@@ -32,7 +32,8 @@ impl<T: Material> Hitable for Sphere<T> {
                     t: r_lo,
                     p: r.at(r_lo),
                     normal: (r.at(r_lo) - self.center).normalized(),
-                    in_ray: r
+                    in_ray: r,
+                    material: &self.material
                 })
             }
             if (t_min <= r_hi) && (r_hi < t_max) {
@@ -40,7 +41,8 @@ impl<T: Material> Hitable for Sphere<T> {
                     t: r_hi,
                     p: r.at(r_hi),
                     normal: (r.at(r_hi) - self.center).normalized(),
-                    in_ray: r
+                    in_ray: r,
+                    material: &self.material
                 })
             }
         }
