@@ -14,7 +14,7 @@ use vector::Vector3f;
 use ray::Ray;
 use sphere::Sphere;
 use hitable::{Hitable, HitableList};
-use materials::{Lambertian, Metal};
+use materials::{Lambertian, Metal, Dielectric};
 
 fn compute_color(r: Ray, world: &HitableList, depth_limit: u16) -> Vector3f {
     let unit_dir = r.direction.normalized();
@@ -48,7 +48,7 @@ fn main() {
     let width = 480;
 
     let antialiasing_samples = 100;
-    let secondary_ray_limit = 8;
+    let secondary_ray_limit = 16;
 
     let world = HitableList{
         items: vec![
@@ -56,7 +56,7 @@ fn main() {
                 Vector3f::new(0.0, 0.0, -1.0), 
                 0.5, 
                 Lambertian{
-                    albedo: Vector3f::new(0.8, 0.3, 0.3)
+                    albedo: Vector3f::new(0.1, 0.2, 0.5)
                 }
             )),
             Box::new(Sphere::new(
@@ -75,11 +75,12 @@ fn main() {
             )),
             Box::new(Sphere::new(
                 Vector3f::new(-1.0, 0.0, -1.0), 
-                0.5, 
-                Metal{
-                    albedo: Vector3f::new(0.8, 0.8, 0.8)
-                }
+                0.5, Dielectric{ref_idx: 1.5}
             )),
+            // Box::new(Sphere::new(
+            //     Vector3f::new(-1.0, 0.0, -1.0), 
+            //     -0.45, Dielectric{ref_idx: 1.5}
+            // )),
         ]
     };
 
