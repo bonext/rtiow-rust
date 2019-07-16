@@ -59,7 +59,7 @@ fn refract(falling: Vector3f, normal: Vector3f, ni_over_nt: f32) -> Option<Vecto
 fn schlick(cosine: f32, ref_idx: f32) -> f32 {
     let mut r0 = (1.0 - ref_idx) / (1.0 + ref_idx);
     r0 = r0 * r0;
-    r0 + (1.0 - r0) *( (1.0 - cosine).powi(5))
+    r0 + (1.0 - r0) * (1.0 - cosine).powi(5)
 }
 
 impl Material for Dielectric {
@@ -69,25 +69,23 @@ impl Material for Dielectric {
         
         let out_normal: Vector3f;
         let ni_over_nt: f32;
-        let cosine: f32;
 
         let attenuation = Vector3f::new(1.0, 1.0, 1.0);
 
         if hit.in_ray.direction.dot(hit.normal) > 0.0 {
             out_normal = - hit.normal;
             ni_over_nt = self.ref_idx;
-            cosine = self.ref_idx * hit.in_ray.direction.dot(hit.normal) / hit.in_ray.direction.length();
         }
-        
         else {
             out_normal = hit.normal;
             ni_over_nt = 1.0 / self.ref_idx;
-            cosine = - hit.in_ray.direction.dot(hit.normal) / hit.in_ray.direction.length();
         }
+        let cosine = - hit.in_ray.direction.normalized().dot(out_normal);
 
         match refract(hit.in_ray.direction, out_normal, ni_over_nt){
             Some(refracted) => {
                 let p_reflect = schlick(cosine, self.ref_idx);
+                // let p_reflect = 0.0;
                 let uniform = Uniform::new(0.0, 1.0);
                 let p = uniform.sample(&mut rand::thread_rng()) as f32;
                 if p < p_reflect {

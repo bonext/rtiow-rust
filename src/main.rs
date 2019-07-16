@@ -48,22 +48,37 @@ fn main() {
     let width = 480;
 
     let antialiasing_samples = 100;
-    let secondary_ray_limit = 16;
+    let secondary_ray_limit = 8;
 
     let world = HitableList{
         items: vec![
-            Box::new(Sphere::new(
-                Vector3f::new(0.0, 0.0, -1.0), 
-                0.5, 
-                Lambertian{
-                    albedo: Vector3f::new(0.1, 0.2, 0.5)
-                }
-            )),
+            // huge green world
             Box::new(Sphere::new(
                 Vector3f::new(0.0, -100.5, -1.0), 
                 100.0, 
                 Lambertian{
                     albedo: Vector3f::new(0.8, 0.8, 0.0)
+                }
+            )),
+            // Box::new(Sphere::new(
+            //     Vector3f::new(0.0, 0.0, -1.0), 
+            //     0.5, 
+            //     Dielectric{
+            //         ref_idx: 1.5
+            //     }
+            // )),
+            // Box::new(Sphere::new(
+            //     Vector3f::new(0.5, 0.0, -1.5), 
+            //     0.5, 
+            //     Lambertian{
+            //         albedo: Vector3f::new(0.1, 0.2, 0.5)
+            //     }
+            // )),
+            Box::new(Sphere::new(
+                Vector3f::new(0.0, 0.0, -1.0), 
+                0.5, 
+                Lambertian{
+                    albedo: Vector3f::new(0.1, 0.2, 0.5)
                 }
             )),
             Box::new(Sphere::new(
@@ -77,21 +92,20 @@ fn main() {
                 Vector3f::new(-1.0, 0.0, -1.0), 
                 0.5, Dielectric{ref_idx: 1.5}
             )),
-            // Box::new(Sphere::new(
-            //     Vector3f::new(-1.0, 0.0, -1.0), 
-            //     -0.45, Dielectric{ref_idx: 1.5}
-            // )),
         ]
     };
 
     let cam = Camera::default();
-
     let mut img = image::ImageBuffer::new(width, height);
+    let mut du = 0.0;
+    let mut dv = 0.0;
     for (x, y, pixel) in img.enumerate_pixels_mut() {
         let mut color = Vector3f::new(0.0, 0.0, 0.0);
         for _ in 0..antialiasing_samples {
-            let du = rand::random::<f32>();
-            let dv = rand::random::<f32>();
+            if antialiasing_samples > 1 {
+                du = rand::random::<f32>();
+                dv = rand::random::<f32>();
+            }
 
             let u = (x as f32 + du)/ width as f32;
             let v = ((height - y) as f32 + dv) / height as f32;
